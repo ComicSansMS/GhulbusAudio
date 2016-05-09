@@ -1,3 +1,4 @@
+#include <gbAudio/audio.hpp>
 #include <al.h>
 
 void foo()

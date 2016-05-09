@@ -51,15 +51,19 @@ set(GB_AUDIO_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 set(GB_AUDIO_TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 
 set(GB_AUDIO_SOURCE_FILES
-    ${GB_AUDIO_SOURCE_DIR}/audio.cpp
+    ${GB_AUDIO_SOURCE_DIR}/Audio.cpp
+    ${GB_AUDIO_SOURCE_DIR}/AudioDevice.cpp
 )
 
 set(GB_AUDIO_HEADER_FILES
-    ${GB_AUDIO_INCLUDE_DIR}/audio.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/config.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Audio.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioDevice.hpp
 )
 
 set(GB_AUDIO_TEST_SOURCES
     ${GB_AUDIO_TEST_DIR}/TestAudio.cpp
+    ${GB_AUDIO_TEST_DIR}/TestAudioDevice.cpp
 )
 
 add_library(gbAudio ${GB_AUDIO_SOURCE_FILES} ${GB_AUDIO_HEADER_FILES})
