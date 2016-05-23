@@ -52,21 +52,37 @@ set(GB_AUDIO_TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 
 set(GB_AUDIO_SOURCE_FILES
     ${GB_AUDIO_SOURCE_DIR}/Audio.cpp
+    ${GB_AUDIO_SOURCE_DIR}/AudioBackend.cpp
     ${GB_AUDIO_SOURCE_DIR}/AudioDevice.cpp
+)
+
+set(GB_AUDIO_IMPL_OAL_SOURCE_FILES
+    ${GB_AUDIO_SOURCE_DIR}/AudioDevice_OAL.cpp
 )
 
 set(GB_AUDIO_HEADER_FILES
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/config.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Audio.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioBackend.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioDevice.hpp
+)
+
+set(GB_AUDIO_IMPL_OAL_HEADER_FILES
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/impl/AudioDevice_OAL.hpp
 )
 
 set(GB_AUDIO_TEST_SOURCES
     ${GB_AUDIO_TEST_DIR}/TestAudio.cpp
+    ${GB_AUDIO_TEST_DIR}/TestAudioBackend.cpp
     ${GB_AUDIO_TEST_DIR}/TestAudioDevice.cpp
 )
 
-add_library(gbAudio ${GB_AUDIO_SOURCE_FILES} ${GB_AUDIO_HEADER_FILES})
+add_library(gbAudio
+    ${GB_AUDIO_SOURCE_FILES}
+    ${GB_AUDIO_HEADER_FILES}
+    ${GB_AUDIO_IMPL_OAL_SOURCE_FILES}
+    ${GB_AUDIO_IMPL_OAL_HEADER_FILES}
+)
 target_include_directories(gbAudio PUBLIC $<BUILD_INTERFACE:${GB_AUDIO_INCLUDE_DIR}>)
 target_include_directories(gbAudio PUBLIC $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>)
 target_include_directories(gbAudio PRIVATE $<BUILD_INTERFACE:${OPENAL_INCLUDE_DIR}>)
@@ -141,8 +157,9 @@ if(GB_BUILD_TESTS)
     if(GB_GENERATE_COVERAGE_INFO AND (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
         target_compile_options(gbAudio PRIVATE --coverage -fprofile-arcs -ftest-coverage)
         target_link_libraries(gbAudio PRIVATE -fprofile-arcs -ftest-coverage)
+        set(COVERAGE_SOURCES ${GB_AUDIO_SOURCE_FILES} ${GB_AUDIO_IMPL_OAL_SOURCE_FILES})
         add_custom_target(gbAudio_TestCoverage
-            COMMAND ${GCOV_COMMAND} -o CMakeFiles/gbAudio.dir/src ${GB_AUDIO_SOURCE_FILES}
+            COMMAND ${GCOV_COMMAND} -o CMakeFiles/gbAudio.dir/src ${COVERAGE_SOURCES}
             WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
             COMMENT "Collecting gcov coverage information"
         )

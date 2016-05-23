@@ -8,6 +8,7 @@
 */
 
 #include <gbAudio/config.hpp>
+#include <gbAudio/AudioBackend.hpp>
 
 #include <iosfwd>
 #include <memory>
@@ -16,16 +17,11 @@
 
 namespace GHULBUS_AUDIO_NAMESPACE
 {
-
 class AudioDevice;
 typedef std::unique_ptr<AudioDevice> AudioDevicePtr;
 
 class AudioDevice {
 public:
-    enum class AudioBackend {
-        Default = 0,
-        OpenAL
-    };
     struct DeviceIdentifier {
         std::string Name;
     };
@@ -37,24 +33,22 @@ public:
         MC_6_1,
         MC_7_1
     };
-private:
-    class AudioDeviceImpl;
-    std::unique_ptr<AudioDeviceImpl> m_impl;
 public:
+    AudioDevice() = default;
     AudioDevice(AudioDevice const&) = delete;
     AudioDevice& operator=(AudioDevice const&) = delete;
 
-    AudioDevice();
-    AudioDevice(AudioBackend audio_backend);
-    AudioDevice(AudioBackend audio_backend, DeviceIdentifier const& device_id);
-    ~AudioDevice();
+    virtual ~AudioDevice() {}
 
-    std::vector<ChannelFormat> getSupportedChannelFormats() const;
+    virtual std::vector<ChannelFormat> getSupportedChannelFormats() const = 0;
+    virtual AudioBackend getBackend() const = 0;
 
-    static std::vector<DeviceIdentifier> enumerateDevices(AudioBackend audio_backend);
+    GHULBUS_AUDIO_API static AudioDevicePtr create();
+    GHULBUS_AUDIO_API static AudioDevicePtr create(AudioBackend audio_backend);
+    GHULBUS_AUDIO_API static AudioDevicePtr create(AudioBackend audio_backend, DeviceIdentifier const& device_id);
+    GHULBUS_AUDIO_API static std::vector<DeviceIdentifier> enumerateDevices(AudioBackend audio_backend);
 };
 
-std::ostream& operator<<(std::ostream& os, AudioDevice::ChannelFormat channel_format);
-
+GHULBUS_AUDIO_API std::ostream& operator<<(std::ostream& os, AudioDevice::ChannelFormat channel_format);
 }
 #endif

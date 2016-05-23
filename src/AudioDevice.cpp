@@ -1,41 +1,47 @@
 #include <gbAudio/AudioDevice.hpp>
 
+#include <gbAudio/impl/AudioDevice_OAL.hpp>
+
 #include <gbBase/Assert.hpp>
+#include <gbBase/Exception.hpp>
+#include <gbBase/UnusedVariable.hpp>
 
 #include <al.h>
 #include <alc.h>
 
 namespace GHULBUS_AUDIO_NAMESPACE
 {
-class AudioDevice::AudioDeviceImpl
+/* static */
+AudioDevicePtr AudioDevice::create()
 {
-};
-
-AudioDevice::AudioDevice()
-    :AudioDevice(AudioBackend::Default)
-{}
-
-AudioDevice::AudioDevice(AudioBackend audio_backend)
-    :AudioDevice(audio_backend, DeviceIdentifier{""})
-{}
-
-AudioDevice::AudioDevice(AudioBackend audio_backend, DeviceIdentifier const& device_id)
-    :m_impl(std::make_unique<AudioDeviceImpl>())
-{
+    return AudioDevice::create(AudioBackend::Default);
 }
 
-AudioDevice::~AudioDevice()
+/* static */
+AudioDevicePtr AudioDevice::create(AudioBackend audio_backend)
 {
+    return AudioDevice::create(audio_backend, AudioDevice::DeviceIdentifier{""});
 }
 
-auto AudioDevice::getSupportedChannelFormats() const -> std::vector<ChannelFormat>
+/* static */
+AudioDevicePtr AudioDevice::create(AudioBackend audio_backend, AudioDevice::DeviceIdentifier const& device_id)
 {
-    return std::vector<ChannelFormat>();
+    switch(audio_backend)
+    {
+    case AudioBackend::Default:
+    case AudioBackend::OpenAL:
+        return std::make_unique<impl::AudioDevice_OAL>(device_id);
+    default: GHULBUS_UNREACHABLE_MESSAGE("Invalid backend.");
+    }
+    GHULBUS_THROW(Ghulbus::Exceptions::NotImplemented(), "Invalid audio backend.");
 }
 
-/* static */ auto AudioDevice::enumerateDevices(AudioBackend audio_backend) -> std::vector<DeviceIdentifier>
+/* static */
+std::vector<AudioDevice::DeviceIdentifier> AudioDevice::enumerateDevices(AudioBackend audio_backend)
 {
-    return std::vector<DeviceIdentifier>();
+    // @todo
+    GHULBUS_UNUSED_VARIABLE(audio_backend);
+    return std::vector<AudioDevice::DeviceIdentifier>();
 }
 
 std::ostream& operator<<(std::ostream& os, AudioDevice::ChannelFormat channel_format)
