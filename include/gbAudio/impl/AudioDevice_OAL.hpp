@@ -15,7 +15,8 @@ namespace GHULBUS_AUDIO_NAMESPACE
 namespace impl
 {
 class AudioDevice_OAL : public AudioDevice {
-public:
+private:
+
 public:
     AudioDevice_OAL(AudioDevice_OAL const&) = delete;
     AudioDevice_OAL& operator=(AudioDevice_OAL const&) = delete;
@@ -23,8 +24,14 @@ public:
     AudioDevice_OAL(AudioDevice::DeviceIdentifier const& device_id);
     ~AudioDevice_OAL() override;
 
+    /** @name Implementation of AudioDevice
+     * @{
+     */
     std::vector<ChannelFormat> getSupportedChannelFormats() const override;
     AudioBackend getBackend() const override;
+    /// @}
+
+    GHULBUS_AUDIO_API static std::vector<DeviceIdentifier> enumerateDevices_OAL();
 };
 }
 }

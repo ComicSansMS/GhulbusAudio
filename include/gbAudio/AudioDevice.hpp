@@ -23,7 +23,7 @@ typedef std::unique_ptr<AudioDevice> AudioDevicePtr;
 class AudioDevice {
 public:
     struct DeviceIdentifier {
-        std::string Name;
+        std::string name;
     };
     enum class ChannelFormat {
         Mono = 0,
