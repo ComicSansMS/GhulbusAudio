@@ -24,8 +24,14 @@ AudioDevice_OAL::~AudioDevice_OAL()
 
 std::vector<AudioDevice::ChannelFormat> AudioDevice_OAL::getSupportedChannelFormats() const
 {
-    // @todo
-    return std::vector<ChannelFormat>();
+    std::vector<ChannelFormat> ret;
+    ret.push_back(ChannelFormat::Mono);
+    ret.push_back(ChannelFormat::Stereo);
+    if(alGetEnumValue("AL_FORMAT_QUAD16"))  { ret.push_back(ChannelFormat::MC_Quad); }
+    if(alGetEnumValue("AL_FORMAT_51CHN16")) { ret.push_back(ChannelFormat::MC_5_1); }
+    if(alGetEnumValue("AL_FORMAT_61CHN16")) { ret.push_back(ChannelFormat::MC_6_1); }
+    if(alGetEnumValue("AL_FORMAT_71CHN16")) { ret.push_back(ChannelFormat::MC_7_1); }
+    return ret;
 }
 
 AudioBackend AudioDevice_OAL::getBackend() const
