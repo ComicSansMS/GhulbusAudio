@@ -1,1 +1,1 @@
-#include <gbAudio/audio.hpp>
+#include <gbAudio/Audio.hpp>
