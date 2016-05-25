@@ -1,0 +1,69 @@
+
+language: cpp
+sudo: false
+
+compiler:
+  - gcc
+addons: &clang34
+  apt:
+    packages:
+    # compiler
+      - clang-3.6
+      - g++-5
+      - gcc-5
+      - ninja-build
+    # doc tools
+      - doxygen
+      - graphviz
+      # mscgen is currently not whitelisted :(
+      #- mscgen
+    # third-party dependencies
+      - libboost1.55-dev
+      - libboost-date-time1.55-dev
+      - libboost-log1.55-dev
+      - libboost-thread1.55-dev
+      - libboost-wave1.55-dev
+      - libboost1.55-all-dev
+      - libopenal-dev
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise-3.6
+      - boost-latest
+
+install:
+  - gcc-5 --version
+  - clang-3.6 --version
+  # install CMake 3.3
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
+  - echo "f3546812c11ce7f5d64dc132a566b749 *cmake-3.3.2-Linux-x86_64.tar.gz" > cmake_md5.txt
+  - travis_retry wget --no-check-certificate https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz
+  - md5sum -c cmake_md5.txt
+  - tar -xvf cmake-3.3.2-Linux-x86_64.tar.gz > /dev/null
+  - mv cmake-3.3.2-Linux-x86_64 cmake-install
+  - PATH=${DEPS_DIR}/cmake-install:${DEPS_DIR}/cmake-install/bin:$PATH
+  - which cmake
+
+before_script:
+  - cd ${TRAVIS_BUILD_DIR}
+  - git clone https://github.com/ComicSansMS/GhulbusBase.git gbBase
+  - cd gbBase
+  - mkdir base-static-gcc5
+  - cd base-static-gcc5
+  - cmake -DCMAKE_CXX_COMPILER=g++-5 -DCMAKE_C_COMPILER=gcc-5 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DGB_BUILD_TESTS=OFF -DGB_GENERATE_DOXYGEN_DOCUMENTATION=OFF -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/base-static-gcc5_INSTALL ..
+  - make && make install
+  - cd ${TRAVIS_BUILD_DIR}
+  - mkdir build-static-gcc5 && mkdir build-shared-gcc5 && mkdir build-bare-gcc5 && mkdir build-coverage-gcc5 && mkdir build-static-clang36 && mkdir build-shared-clang36
+  - cd build-static-gcc5
+  - cmake -DCMAKE_CXX_COMPILER=g++-5 -DCMAKE_C_COMPILER=gcc-5 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DGHULBUS_BASE_ROOT=${TRAVIS_BUILD_DIR}/base-static-gcc5_INSTALL ..
+  - make
+  - cd ${TRAVIS_BUILD_DIR}/gbAudio
+
+script:
+  - cd build-static-gcc5
+  - make test
+
+after_script:
+  - cd ${TRAVIS_BUILD_DIR}/gbAudio
+  - cd build-static-gcc5
+  - make doxygen-doc
