@@ -7,11 +7,6 @@
 #include <al.h>
 #include <alc.h>
 
-// ALC_ALL_DEVICES_SPECIFIER is an extension that might not be defined everywhere
-#ifndef ALC_ALL_DEVICES_SPECIFIER
-#   define ALC_ALL_DEVICES_SPECIFIER 0
-#endif
-
 namespace GHULBUS_AUDIO_NAMESPACE
 {
 namespace impl
@@ -49,9 +44,11 @@ AudioBackend AudioDevice_OAL::getBackend() const
     if(alcIsExtensionPresent(nullptr, "ALC_ENUMERATION_EXT") != ALC_TRUE) {
         GHULBUS_THROW(Exceptions::IOError(), "Device enumeration not supported.");
     }
-    ALCchar const* device_names = 
+    ALCchar const* device_names =
+#ifdef ALC_ALL_DEVICES_SPECIFIER
         (alcIsExtensionPresent(nullptr, "ALC_ENUMERATE_ALL_EXT") == ALC_TRUE) ?
-        alcGetString(nullptr, ALC_ALL_DEVICES_SPECIFIER) :
+            alcGetString(nullptr, ALC_ALL_DEVICES_SPECIFIER) :
+#endif
         alcGetString(nullptr, ALC_DEVICE_SPECIFIER);
     // device names is a concatenation of zero terminated strings;
     // the end of the list is designated by an empty string.
