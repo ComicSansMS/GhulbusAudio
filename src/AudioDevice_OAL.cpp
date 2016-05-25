@@ -7,6 +7,11 @@
 #include <al.h>
 #include <alc.h>
 
+// ALC_ALL_DEVICES_SPECIFIER is an extension that might not be defined everywhere
+#ifndef ALC_ALL_DEVICES_SPECIFIER
+#   define ALC_ALL_DEVICES_SPECIFIER 0
+#endif
+
 namespace GHULBUS_AUDIO_NAMESPACE
 {
 namespace impl
