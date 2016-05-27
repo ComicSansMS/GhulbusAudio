@@ -2,24 +2,59 @@
 
 #include <gbAudio/Exceptions.hpp>
 
+#include <gbBase/Log.hpp>
 #include <gbBase/UnusedVariable.hpp>
 
 #include <al.h>
 #include <alc.h>
 
+#include <memory>
+
 namespace GHULBUS_AUDIO_NAMESPACE
 {
 namespace impl
 {
-AudioDevice_OAL::AudioDevice_OAL(AudioDevice::DeviceIdentifier const& device_id)
+struct AudioDevice_OAL::OALImpl
 {
-    // @todo
-    GHULBUS_UNUSED_VARIABLE(device_id);
+    std::unique_ptr<ALCdevice, std::function<void(ALCdevice*)>> device;
+    std::unique_ptr<ALCcontext, std::function<void(ALCcontext*)>> context;
+
+    OALImpl(AudioDevice::DeviceIdentifier const& device_id)
+    {
+        auto dev = alcOpenDevice(device_id.name.empty() ? nullptr : device_id.name.c_str());
+        if(!dev) {
+            GHULBUS_THROW(Exceptions::OpenALError(), "Error creating OpenAL device \"" + device_id.name + "\".");
+        }
+        device = decltype(device)(dev, [](ALCdevice* dev) {
+                auto res = alcCloseDevice(dev);
+                if(res != ALC_TRUE) {
+                    GHULBUS_LOG(Error, "Error closing OpenAL device. "
+                        "This is usually caused by a leaked context or buffer.");
+                }
+            });
+
+        auto ctx = alcCreateContext(device.get(), nullptr);
+        if(!ctx) {
+            GHULBUS_THROW(Exceptions::OpenALError(), "Error creating OpenAL context.");
+        }
+        context = decltype(context)(ctx, [](ALCcontext* ctx) {
+                alcMakeContextCurrent(nullptr);
+                alcDestroyContext(ctx);
+            });
+        if(alcMakeContextCurrent(ctx) != ALC_TRUE) {
+            GHULBUS_THROW(Exceptions::OpenALError(), "Error activating created OpenAL context.");
+        }
+    }
+};
+
+AudioDevice_OAL::AudioDevice_OAL(AudioDevice::DeviceIdentifier const& device_id)
+    :m_impl(std::make_unique<OALImpl>(device_id))
+{
 }
 
 AudioDevice_OAL::~AudioDevice_OAL()
 {
-    // @todo
+    /* needed for pimpl destruction */
 }
 
 std::vector<AudioDevice::ChannelFormat> AudioDevice_OAL::getSupportedChannelFormats() const
@@ -42,7 +77,7 @@ AudioBackend AudioDevice_OAL::getBackend() const
 /* static */ std::vector<AudioDevice::DeviceIdentifier> AudioDevice_OAL::enumerateDevices_OAL()
 {
     if(alcIsExtensionPresent(nullptr, "ALC_ENUMERATION_EXT") != ALC_TRUE) {
-        GHULBUS_THROW(Exceptions::IOError(), "Device enumeration not supported.");
+        GHULBUS_THROW(Exceptions::OpenALError(), "Device enumeration not supported.");
     }
     ALCchar const* device_names =
 #ifdef ALC_ALL_DEVICES_SPECIFIER

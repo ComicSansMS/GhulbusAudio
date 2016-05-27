@@ -1,3 +1,4 @@
+#include <gbAudio/Audio.hpp>
 #include <gbAudio/AudioDevice.hpp>
 
 #include <catch.hpp>
@@ -8,6 +9,8 @@ TEST_CASE("AudioDevice")
 {
     using GHULBUS_AUDIO_NAMESPACE::AudioDevice;
     using GHULBUS_AUDIO_NAMESPACE::AudioBackend;
+
+    GHULBUS_AUDIO_NAMESPACE::initializeAudio();
 
     SECTION("Device enumeration")
     {
@@ -44,4 +47,6 @@ TEST_CASE("AudioDevice")
         unique_list.erase(std::unique(begin(unique_list), end(unique_list)), end(unique_list));
         CHECK(unique_list.size() == channel_formats.size());
     }
+
+    GHULBUS_AUDIO_NAMESPACE::shutdownAudio();
 }

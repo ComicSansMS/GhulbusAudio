@@ -16,7 +16,8 @@ namespace impl
 {
 class AudioDevice_OAL : public AudioDevice {
 private:
-
+    struct OALImpl;
+    std::unique_ptr<OALImpl> m_impl;
 public:
     AudioDevice_OAL(AudioDevice_OAL const&) = delete;
     AudioDevice_OAL& operator=(AudioDevice_OAL const&) = delete;
