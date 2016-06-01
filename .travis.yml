@@ -8,7 +8,7 @@ addons: &clang34
   apt:
     packages:
     # compiler
-      - clang-3.6
+#      - clang-3.6
       - g++-5
       - gcc-5
       - ninja-build
@@ -27,12 +27,12 @@ addons: &clang34
       - libopenal-dev
     sources:
       - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.6
+#      - llvm-toolchain-precise-3.6
       - boost-latest
 
 install:
   - gcc-5 --version
-  - clang-3.6 --version
+#  - clang-3.6 --version
   # install CMake 3.3
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
   - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
