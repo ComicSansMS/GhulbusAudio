@@ -45,6 +45,10 @@ if(GHULBUS_BASE_ROOT)
     list(APPEND CMAKE_PREFIX_PATH ${GHULBUS_BASE_ROOT}/cmake)
 endif()
 find_package(gbBase REQUIRED)
+if(NOT ((GB_BASE_IS_SHARED AND BUILD_SHARED_LIBS) OR ((NOT GB_BASE_IS_SHARED) AND (NOT BUILD_SHARED_LIBS))))
+    message(STATUS "gbBase is shared " ${GB_BASE_IS_SHARED} "; gbAudio is shared " ${BUILD_SHARED_LIBS} ".")
+    message(FATAL_ERROR "Mixing shared and static builds of Ghulbus libraries is not supported.")
+endif()
 
 set(GB_AUDIO_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 set(GB_AUDIO_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
@@ -114,6 +118,16 @@ endif()
 set_property(TARGET gbAudio PROPERTY VERSION ${GB_AUDIO_VERSION})
 set_property(TARGET gbAudio PROPERTY SOVERSION ${GB_AUDIO_VERSION_MAJOR})
 set_property(TARGET gbAudio PROPERTY DEBUG_POSTFIX d)
+
+# Copy dlls
+if(WIN32 AND BUILD_SHARED_LIBS)
+    set(src_genexp)
+    foreach(cfg ${CMAKE_CONFIGURATION_TYPES})
+        string(TOUPPER ${cfg} cfg_upper)
+        set(src_genexp "${src_genexp}$<$<CONFIG:${cfg}>:$<TARGET_PROPERTY:Ghulbus::gbBase,IMPORTED_LOCATION_${cfg_upper}>>")
+    endforeach()
+    add_custom_command(TARGET gbAudio POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${src_genexp} $<TARGET_FILE_DIR:gbAudio>)
+endif()
 
 ###############################################################################
 ## Testing gbAudio

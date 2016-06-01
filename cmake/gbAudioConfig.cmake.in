@@ -15,3 +15,4 @@ if(is_imported)
         INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
     )
 endif()
+set(GB_AUDIO_IS_SHARED @BUILD_SHARED_LIBS@)
