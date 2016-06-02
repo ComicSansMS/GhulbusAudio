@@ -34,6 +34,8 @@ set(GB_AUDIO_VERSION_MINOR 1)
 set(GB_AUDIO_VERSION_PATCH 0)
 set(GB_AUDIO_VERSION "${GB_AUDIO_VERSION_MAJOR}.${GB_AUDIO_VERSION_MINOR}.${GB_AUDIO_VERSION_PATCH}")
 
+option(BUILD_SHARED_LIBS "If checked, generate dynamic instead of static libraries." OFF)
+
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED)
 
@@ -96,13 +98,14 @@ target_link_libraries(gbAudio PUBLIC Threads::Threads)
 target_link_libraries(gbAudio PUBLIC Ghulbus::gbBase)
 target_link_libraries(gbAudio PRIVATE ${OPENAL_LIBRARY})
 
-target_compile_definitions(gbAudio PUBLIC $<$<CONFIG:Debug>:GHULBUS_CONFIG_ASSERT_LEVEL_DEBUG>)
+if(NOT GB_GENERATE_COVERAGE_INFO)
+    target_compile_definitions(gbAudio PUBLIC $<$<CONFIG:Debug>:GHULBUS_CONFIG_ASSERT_LEVEL_DEBUG>)
+endif()
 target_compile_options(gbAudio PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/W4>)
 target_compile_options(gbAudio PRIVATE
     $<$<OR:$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:Clang>>:-pedantic -Wall>)
 target_compile_options(gbAudio PRIVATE $<$<CXX_COMPILER_ID:GNU>:-pedantic -Wall>)
 
-option(BUILD_SHARED_LIBS "If checked, generate dynamic instead of static libraries." OFF)
 include(GenerateExportHeader)
 generate_export_header(gbAudio
     EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/generated/gbAudio/gbAudio_Export.hpp
