@@ -171,6 +171,7 @@ if(GB_BUILD_TESTS)
 
     if(GB_GENERATE_COVERAGE_INFO AND (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"))
         target_compile_options(gbAudio PRIVATE --coverage -fprofile-arcs -ftest-coverage)
+        target_compile_definitions(gbAudio PRIVATE GHULBUS_CONFIG_ASSERT_LEVEL_PRODUCTION)
         target_link_libraries(gbAudio PRIVATE -fprofile-arcs -ftest-coverage)
         set(COVERAGE_SOURCES ${GB_AUDIO_SOURCE_FILES} ${GB_AUDIO_IMPL_OAL_SOURCE_FILES})
         add_custom_target(gbAudio_TestCoverage
