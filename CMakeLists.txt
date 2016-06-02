@@ -99,7 +99,7 @@ target_link_libraries(gbAudio PUBLIC Ghulbus::gbBase)
 target_link_libraries(gbAudio PRIVATE ${OPENAL_LIBRARY})
 
 if(NOT GB_GENERATE_COVERAGE_INFO)
-    target_compile_definitions(gbAudio PUBLIC $<$<CONFIG:Debug>:GHULBUS_CONFIG_ASSERT_LEVEL_DEBUG>)
+    target_compile_definitions(gbAudio PRIVATE $<$<CONFIG:Debug>:GHULBUS_CONFIG_ASSERT_LEVEL_DEBUG>)
 endif()
 target_compile_options(gbAudio PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/W4>)
 target_compile_options(gbAudio PRIVATE
