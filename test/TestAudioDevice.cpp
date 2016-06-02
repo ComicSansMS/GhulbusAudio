@@ -1,9 +1,13 @@
 #include <gbAudio/Audio.hpp>
 #include <gbAudio/AudioDevice.hpp>
+#include <gbAudio/Exceptions.hpp>
+
+#include <gbBase/Assert.hpp>
 
 #include <catch.hpp>
 
 #include <algorithm>
+#include <sstream>
 
 TEST_CASE("AudioDevice")
 {
@@ -19,11 +23,29 @@ TEST_CASE("AudioDevice")
         CHECK(std::none_of(begin(device_list), end(device_list), [](auto dev_id) { return dev_id.name.empty(); }));
     }
 
+    SECTION("Device enumeration invalid backend")
+    {
+        using namespace GHULBUS_BASE_NAMESPACE;
+        auto old_handler = Assert::getAssertionHandler();
+        Assert::setAssertionHandler([](Assert::HandlerParameters const&){});
+        CHECK(AudioDevice::enumerateDevices(static_cast<AudioBackend>(9999)).empty());
+        Assert::setAssertionHandler(old_handler);
+    }
+
     SECTION("Device creation")
     {
-        auto dev = AudioDevice::create(AudioBackend::Default);
+        auto dev = AudioDevice::create();
         REQUIRE(dev);
         CHECK(dev->getBackend() == AudioBackend::OpenAL);
+    }
+
+    SECTION("Device creation invalid backend")
+    {
+        using namespace GHULBUS_BASE_NAMESPACE;
+        auto old_handler = Assert::getAssertionHandler();
+        Assert::setAssertionHandler([](Assert::HandlerParameters const&){});
+        CHECK(AudioDevice::create(static_cast<AudioBackend>(9999)) == nullptr);
+        Assert::setAssertionHandler(old_handler);
     }
 
     SECTION("Channel format enumeration")
@@ -46,6 +68,28 @@ TEST_CASE("AudioDevice")
         std::sort(begin(unique_list), end(unique_list));
         unique_list.erase(std::unique(begin(unique_list), end(unique_list)), end(unique_list));
         CHECK(unique_list.size() == channel_formats.size());
+    }
+
+    SECTION("ChannelFormat ostream inserter")
+    {
+        using GHULBUS_AUDIO_NAMESPACE::AudioDevice;
+        for(int i = 0; i < static_cast<int>(AudioDevice::ChannelFormat::MC_7_1) + 1; ++i)
+        {
+            std::stringstream sstr;
+            sstr << static_cast<AudioDevice::ChannelFormat>(i);
+            CHECK(!sstr.str().empty());
+        }
+
+        // invalid channel format
+        {
+            using namespace GHULBUS_BASE_NAMESPACE;
+            auto old_handler = Assert::getAssertionHandler();
+            Assert::setAssertionHandler([](Assert::HandlerParameters const&){});
+            std::stringstream sstr;
+            sstr << static_cast<AudioDevice::ChannelFormat>(9999);
+            CHECK(sstr.str().empty());
+            Assert::setAssertionHandler(old_handler);
+        }
     }
 
     GHULBUS_AUDIO_NAMESPACE::shutdownAudio();
