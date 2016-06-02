@@ -32,10 +32,10 @@ AudioDevicePtr AudioDevice::create(AudioBackend audio_backend, AudioDevice::Devi
     case AudioBackend::Default:
     case AudioBackend::OpenAL:
         return std::make_unique<impl::AudioDevice_OAL>(device_id);
-    default: GHULBUS_UNREACHABLE_MESSAGE("Invalid backend.");
+    default: break;
     }
-    GHULBUS_THROW(Exceptions::AssertFailed() << Exception_Info::invalid_enum_value(static_cast<int>(audio_backend)),
-        "Invalid audio backend.");
+    GHULBUS_UNREACHABLE_MESSAGE("Invalid audio backend.");
+    return nullptr;
 }
 
 /* static */
@@ -46,10 +46,10 @@ std::vector<AudioDevice::DeviceIdentifier> AudioDevice::enumerateDevices(AudioBa
     case AudioBackend::Default:
     case AudioBackend::OpenAL:
         return impl::AudioDevice_OAL::enumerateDevices_OAL();
-    default: GHULBUS_UNREACHABLE_MESSAGE("Invalid backend.");
+    default: break;
     }
-    GHULBUS_THROW(Exceptions::AssertFailed() << Exception_Info::invalid_enum_value(static_cast<int>(audio_backend)),
-        "Invalid audio backend.");
+    GHULBUS_UNREACHABLE_MESSAGE("Invalid audio backend.");
+    return std::vector<AudioDevice::DeviceIdentifier>();
 }
 
 std::ostream& operator<<(std::ostream& os, AudioDevice::ChannelFormat channel_format)
