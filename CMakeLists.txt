@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.3)
 
 project(GhulbusAudio)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if($ENV{TRAVIS})
@@ -73,6 +73,8 @@ set(GB_AUDIO_HEADER_FILES
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioDevice.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioFwd.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Exceptions.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Data.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/DataFormat.hpp
 )
 
 set(GB_AUDIO_IMPL_OAL_HEADER_FILES
@@ -83,6 +85,8 @@ set(GB_AUDIO_TEST_SOURCES
     ${GB_AUDIO_TEST_DIR}/TestAudio.cpp
     ${GB_AUDIO_TEST_DIR}/TestAudioBackend.cpp
     ${GB_AUDIO_TEST_DIR}/TestAudioDevice.cpp
+    ${GB_AUDIO_TEST_DIR}/TestData.cpp
+    ${GB_AUDIO_TEST_DIR}/TestDataFormat.cpp
 )
 
 add_library(gbAudio
@@ -103,6 +107,8 @@ if(NOT GB_GENERATE_COVERAGE_INFO)
     target_compile_definitions(gbAudio PRIVATE $<$<CONFIG:Debug>:GHULBUS_CONFIG_ASSERT_LEVEL_DEBUG>)
 endif()
 target_compile_options(gbAudio PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/W4>)
+target_compile_options(gbAudio PUBLIC $<$<STREQUAL:$<CXX_COMPILER_ID>,MSVC>:/permissive->)
+target_compile_options(gbAudio PUBLIC $<$<STREQUAL:$<CXX_COMPILER_ID>,MSVC>:/std:c++latest>)
 target_compile_options(gbAudio PRIVATE
     $<$<OR:$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:Clang>>:-pedantic -Wall>)
 target_compile_options(gbAudio PRIVATE $<$<CXX_COMPILER_ID:GNU>:-pedantic -Wall>)
@@ -146,15 +152,15 @@ if(GB_BUILD_TESTS)
         if(IS_TRAVIS_BUILD)     # on travis, use git for fetching instead of wget
             set(GB_FETCH_EXTERNAL_CATCH
                 GIT_REPOSITORY https://github.com/philsquared/Catch.git
-                GIT_TAG 0c1c9fa9229c7358ce16c9910004a39290b20f5f)
+                GIT_TAG 3dcc9233515ea69e45a11be369f867a944e72e76)
         elseif(WIN32)
             set(GB_FETCH_EXTERNAL_CATCH
-                URL https://github.com/philsquared/Catch/archive/v1.2.1-develop.12.zip
-                URL_HASH MD5=cda228922a1c9248364c99a3ff9cd9fa)
+                URL https://github.com/philsquared/Catch/archive/v1.9.4.zip
+                URL_HASH MD5=86d4a37ac01d3ac201afb6345bd7bac0)
         else()
             set(GB_FETCH_EXTERNAL_CATCH
-                URL https://github.com/philsquared/Catch/archive/v1.2.1-develop.12.tar.gz
-                URL_HASH MD5=a8dfb7be899a6e7fb30bd55d53426122)
+                URL https://github.com/philsquared/Catch/archive/v1.9.4.tar.gz
+                URL_HASH MD5=84d646fc40373e4ba217363a091ce7b1)
         endif()
         ExternalProject_Add(Catch-External
             PREFIX ${CMAKE_BINARY_DIR}/external/Catch
