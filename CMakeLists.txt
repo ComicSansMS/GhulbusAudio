@@ -71,6 +71,7 @@ set(GB_AUDIO_HEADER_FILES
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Audio.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioBackend.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioDevice.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioFwd.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Exceptions.hpp
 )
 
