@@ -9,6 +9,11 @@
 #include <algorithm>
 #include <sstream>
 
+namespace
+{
+    struct NoReturn {};
+}
+
 TEST_CASE("AudioDevice")
 {
     using GHULBUS_AUDIO_NAMESPACE::AudioDevice;
@@ -27,8 +32,10 @@ TEST_CASE("AudioDevice")
     {
         using namespace GHULBUS_BASE_NAMESPACE;
         auto old_handler = Assert::getAssertionHandler();
-        Assert::setAssertionHandler([](Assert::HandlerParameters const&){});
-        CHECK(AudioDevice::enumerateDevices(static_cast<AudioBackend>(9999)).empty());
+        Assert::setAssertionHandler([](Assert::HandlerParameters const&) { throw NoReturn(); });
+        try {
+            AudioDevice::enumerateDevices(static_cast<AudioBackend>(9999));
+        } catch(NoReturn&) {}
         Assert::setAssertionHandler(old_handler);
     }
 
@@ -43,8 +50,10 @@ TEST_CASE("AudioDevice")
     {
         using namespace GHULBUS_BASE_NAMESPACE;
         auto old_handler = Assert::getAssertionHandler();
-        Assert::setAssertionHandler([](Assert::HandlerParameters const&){});
-        CHECK(AudioDevice::create(static_cast<AudioBackend>(9999)) == nullptr);
+        Assert::setAssertionHandler([](Assert::HandlerParameters const&) { throw NoReturn(); });
+        try {
+            AudioDevice::create(static_cast<AudioBackend>(9999));
+        } catch(NoReturn&) {}
         Assert::setAssertionHandler(old_handler);
     }
 
@@ -84,10 +93,11 @@ TEST_CASE("AudioDevice")
         {
             using namespace GHULBUS_BASE_NAMESPACE;
             auto old_handler = Assert::getAssertionHandler();
-            Assert::setAssertionHandler([](Assert::HandlerParameters const&){});
-            std::stringstream sstr;
-            sstr << static_cast<AudioDevice::ChannelFormat>(9999);
-            CHECK(sstr.str().empty());
+            Assert::setAssertionHandler([](Assert::HandlerParameters const&) { throw NoReturn(); });
+            try {
+                std::stringstream sstr;
+                sstr << static_cast<AudioDevice::ChannelFormat>(9999);
+            } catch(NoReturn&) {}
             Assert::setAssertionHandler(old_handler);
         }
     }
