@@ -35,7 +35,6 @@ AudioDevicePtr AudioDevice::create(AudioBackend audio_backend, AudioDevice::Devi
     default: break;
     }
     GHULBUS_UNREACHABLE_MESSAGE("Invalid audio backend.");
-    return nullptr;
 }
 
 /* static */
@@ -49,7 +48,6 @@ std::vector<AudioDevice::DeviceIdentifier> AudioDevice::enumerateDevices(AudioBa
     default: break;
     }
     GHULBUS_UNREACHABLE_MESSAGE("Invalid audio backend.");
-    return std::vector<AudioDevice::DeviceIdentifier>();
 }
 
 std::ostream& operator<<(std::ostream& os, AudioDevice::ChannelFormat channel_format)
