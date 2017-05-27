@@ -43,6 +43,7 @@ public:
     {
     }
 
+    ~Data() = default;
     Data(Data const&) = default;
     Data& operator=(Data const&) = default;
     Data(Data&&) = default;
@@ -125,6 +126,16 @@ public:
         return m_data[i];
     }
 
+    /** Access the actual sound data.
+    * @param[in] i Sample index [0..NumberOfSamples).
+    * @return Sample at the given index.
+    */
+    FormatType const& operator[](std::size_t i) const
+    {
+        GHULBUS_PRECONDITION(i < m_data.size());
+        return m_data[i];
+    }
+
     /** Get a raw pointer to the sound data storage.
      * @return Pointer to the beginning of the sound data storage.
      * @pre NumberOfSamples must not be 0.
@@ -132,6 +143,19 @@ public:
      *       should not be called manually.
      * @note The total size of the data storage in bytes is NumberOfSamples*SampleSize.
      */
+    char* getRawData()
+    {
+        GHULBUS_PRECONDITION(!m_data.empty());
+        return reinterpret_cast<char*>(m_data.data());
+    }
+
+    /** Get a raw pointer to the sound data storage.
+    * @return Pointer to the beginning of the sound data storage.
+    * @pre NumberOfSamples must not be 0.
+    * @note This is mainly used for passing data to the underlying sound API and
+    *       should not be called manually.
+    * @note The total size of the data storage in bytes is NumberOfSamples*SampleSize.
+    */
     char const* getRawData() const
     {
         GHULBUS_PRECONDITION(!m_data.empty());
@@ -152,38 +176,52 @@ using DataMono16Bit = Data<DataFormat::Mono16>;
  */
 using DataStereo16Bit = Data<DataFormat::Stereo16>;
 
+/** Data variant.
+ * This type holds exactly one of the instantiated Data types above,
+ * using the std::variant facility.
+ * Use std::get() to retrieve the original Data type from the variant.
+ * Use the utility functions from the DataOp namespace to retrieve data provided
+ * by the generic member functions of Data.
+ */
 using DataVariant = std::variant<DataMono8Bit, DataStereo8Bit, DataMono16Bit, DataStereo16Bit>;
 
+/** Functions for handling DataVariant.
+ */
 namespace DataOp
 {
-    Format getFormat(DataVariant const& dv)
+    inline Format getFormat(DataVariant const& dv)
     {
         return std::visit([](auto const& v) { return v.getFormat(); }, dv);
     }
 
-    std::uint32_t getSamplingFrequency(DataVariant const& dv)
+    inline std::uint32_t getSamplingFrequency(DataVariant const& dv)
     {
         return std::visit([](auto const& v) { return v.getSamplingFrequency(); }, dv);
     }
 
-    std::size_t getSampleSize(DataVariant const& dv)
+    inline std::size_t getSampleSize(DataVariant const& dv)
     {
         return std::visit([](auto const& v) { return v.getSampleSize(); }, dv);
     }
 
-    std::size_t getNumberOfSamples(DataVariant const& dv)
+    inline std::size_t getNumberOfSamples(DataVariant const& dv)
     {
         return std::visit([](auto const& v) { return v.getNumberOfSamples(); }, dv);
     }
 
-    std::chrono::milliseconds getTotalLength(DataVariant const& dv)
+    inline std::chrono::milliseconds getTotalLength(DataVariant const& dv)
     {
         return std::visit([](auto const& v) { return v.getTotalLength(); }, dv);
     }
 
-    char const* getRawData(DataVariant const& dv)
+    inline void resize(DataVariant& dv, std::size_t new_size)
     {
-        return std::visit([](auto const& v) { return v.getRawData(); }, dv);
+        std::visit([new_size](auto& v) { v.resize(new_size); }, dv);
+    }
+
+    inline char* getRawData(DataVariant& dv)
+    {
+        return std::visit([](auto& v) { return v.getRawData(); }, dv);
     }
 }
 
