@@ -60,6 +60,7 @@ set(GB_AUDIO_SOURCE_FILES
     ${GB_AUDIO_SOURCE_DIR}/Audio.cpp
     ${GB_AUDIO_SOURCE_DIR}/AudioBackend.cpp
     ${GB_AUDIO_SOURCE_DIR}/AudioDevice.cpp
+    ${GB_AUDIO_SOURCE_DIR}/WavLoader.cpp
 )
 
 set(GB_AUDIO_IMPL_OAL_SOURCE_FILES
@@ -75,6 +76,7 @@ set(GB_AUDIO_HEADER_FILES
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Exceptions.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Data.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/DataFormat.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/WavLoader.hpp
 )
 
 set(GB_AUDIO_IMPL_OAL_HEADER_FILES
@@ -87,6 +89,7 @@ set(GB_AUDIO_TEST_SOURCES
     ${GB_AUDIO_TEST_DIR}/TestAudioDevice.cpp
     ${GB_AUDIO_TEST_DIR}/TestData.cpp
     ${GB_AUDIO_TEST_DIR}/TestDataFormat.cpp
+    ${GB_AUDIO_TEST_DIR}/TestWavLoader.cpp
 )
 
 add_library(gbAudio
