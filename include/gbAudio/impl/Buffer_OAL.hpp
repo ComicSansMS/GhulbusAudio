@@ -14,22 +14,24 @@
 
 namespace GHULBUS_AUDIO_NAMESPACE
 {
-    namespace impl
-    {
-        class Buffer_OAL : public Buffer {
-        private:
-            ALuint m_buffer;
-        public:
-            Buffer_OAL(ALuint buffer_id);
+namespace impl
+{
+    class Buffer_OAL : public Buffer {
+    private:
+        ALuint m_buffer;
+    public:
+        Buffer_OAL(ALuint buffer_id);
 
-            ~Buffer_OAL() override;
+        ~Buffer_OAL() override;
 
-            /** @name Implementation of Buffer
-            * @{
-            */
-            void setData(DataVariant const& data) override;
-            /// @}
-        };
-    }
+        /** @name Implementation of Buffer
+        * @{
+        */
+        void setData(DataVariant const& data) override;
+        /// @}
+
+        GHULBUS_AUDIO_API ALuint getBufferId_OAL();
+    };
+}
 }
 #endif

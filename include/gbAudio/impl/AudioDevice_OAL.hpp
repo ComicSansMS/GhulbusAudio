@@ -31,6 +31,7 @@ public:
     std::vector<ChannelFormat> getSupportedChannelFormats() const override;
     AudioBackend getBackend() const override;
     BufferPtr createBuffer() override;
+    SourcePtr createSource() override;
     /// @}
 
     GHULBUS_AUDIO_API static std::vector<DeviceIdentifier> enumerateDevices_OAL();

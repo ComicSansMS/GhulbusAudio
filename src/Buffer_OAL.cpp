@@ -56,5 +56,10 @@ void Buffer_OAL::setData(DataVariant const& data)
     }
 }
 
+ALuint Buffer_OAL::getBufferId_OAL()
+{
+    return m_buffer;
+}
+
 }
 }
