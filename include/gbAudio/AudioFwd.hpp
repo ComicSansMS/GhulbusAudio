@@ -14,5 +14,8 @@ namespace GHULBUS_AUDIO_NAMESPACE
 {
     class AudioDevice;
     typedef std::unique_ptr<AudioDevice> AudioDevicePtr;
+
+    class Buffer;
+    typedef std::unique_ptr<Buffer> BufferPtr;
 }
 #endif

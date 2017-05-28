@@ -8,6 +8,7 @@
 */
 
 #include <gbAudio/config.hpp>
+#include <gbAudio/AudioFwd.hpp>
 #include <gbAudio/AudioBackend.hpp>
 
 #include <iosfwd>
@@ -17,8 +18,6 @@
 
 namespace GHULBUS_AUDIO_NAMESPACE
 {
-class AudioDevice;
-typedef std::unique_ptr<AudioDevice> AudioDevicePtr;
 
 class AudioDevice {
 public:
@@ -38,10 +37,11 @@ public:
     AudioDevice(AudioDevice const&) = delete;
     AudioDevice& operator=(AudioDevice const&) = delete;
 
-    virtual ~AudioDevice() {}
+    virtual ~AudioDevice() = default;
 
     virtual std::vector<ChannelFormat> getSupportedChannelFormats() const = 0;
     virtual AudioBackend getBackend() const = 0;
+    virtual BufferPtr createBuffer() = 0;
 
     GHULBUS_AUDIO_API static AudioDevicePtr create();
     GHULBUS_AUDIO_API static AudioDevicePtr create(AudioBackend audio_backend);

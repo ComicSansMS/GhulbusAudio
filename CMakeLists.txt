@@ -65,6 +65,8 @@ set(GB_AUDIO_SOURCE_FILES
 
 set(GB_AUDIO_IMPL_OAL_SOURCE_FILES
     ${GB_AUDIO_SOURCE_DIR}/AudioDevice_OAL.cpp
+    ${GB_AUDIO_SOURCE_DIR}/Buffer_OAL.cpp
+    ${GB_AUDIO_SOURCE_DIR}/Error_OAL.cpp
 )
 
 set(GB_AUDIO_HEADER_FILES
@@ -73,6 +75,7 @@ set(GB_AUDIO_HEADER_FILES
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioBackend.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioDevice.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/AudioFwd.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Buffer.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Exceptions.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/Data.hpp
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/DataFormat.hpp
@@ -81,6 +84,8 @@ set(GB_AUDIO_HEADER_FILES
 
 set(GB_AUDIO_IMPL_OAL_HEADER_FILES
     ${GB_AUDIO_INCLUDE_DIR}/gbAudio/impl/AudioDevice_OAL.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/impl/Buffer_OAL.hpp
+    ${GB_AUDIO_INCLUDE_DIR}/gbAudio/impl/Error_OAL.hpp
 )
 
 set(GB_AUDIO_TEST_SOURCES

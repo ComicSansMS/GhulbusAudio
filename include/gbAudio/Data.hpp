@@ -223,6 +223,11 @@ namespace DataOp
     {
         return std::visit([](auto& v) { return v.getRawData(); }, dv);
     }
+
+    inline char const* getRawData(DataVariant const& dv)
+    {
+        return std::visit([](auto& v) { return v.getRawData(); }, dv);
+    }
 }
 
 }

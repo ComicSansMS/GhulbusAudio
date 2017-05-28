@@ -1,5 +1,7 @@
 #include <gbAudio/impl/AudioDevice_OAL.hpp>
 
+#include <gbAudio/impl/Buffer_OAL.hpp>
+#include <gbAudio/impl/Error_OAL.hpp>
 #include <gbAudio/Exceptions.hpp>
 
 #include <gbBase/Log.hpp>
@@ -96,6 +98,18 @@ AudioBackend AudioDevice_OAL::getBackend() const
         device_names += ret.back().name.length() + 1;
     }
     return ret;
+}
+
+BufferPtr AudioDevice_OAL::createBuffer()
+{
+    ErrorMonitor_OAL monitor;
+    ALuint buffer_id;
+    alGenBuffers(1, &buffer_id);
+    if (monitor.checkError()) {
+        GHULBUS_THROW(Exceptions::OpenALError(), "Buffer creation failed.");
+    }
+    GHULBUS_LOG(Debug, "Creating audio buffer #" << buffer_id << ".");
+    return std::make_unique<impl::Buffer_OAL>(buffer_id);
 }
 }
 }
