@@ -20,5 +20,8 @@ namespace GHULBUS_AUDIO_NAMESPACE
 
     class Source;
     typedef std::unique_ptr<Source> SourcePtr;
+
+    class QueuedSource;
+    typedef std::unique_ptr<QueuedSource> QueuedSourcePtr;
 }
 #endif

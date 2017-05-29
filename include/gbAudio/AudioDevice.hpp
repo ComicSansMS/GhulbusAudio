@@ -43,6 +43,7 @@ public:
     virtual AudioBackend getBackend() const = 0;
     virtual BufferPtr createBuffer() = 0;
     virtual SourcePtr createSource() = 0;
+    virtual QueuedSourcePtr createQueuedSource() = 0;
 
     GHULBUS_AUDIO_API static AudioDevicePtr create();
     GHULBUS_AUDIO_API static AudioDevicePtr create(AudioBackend audio_backend);

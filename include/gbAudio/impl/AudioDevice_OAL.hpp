@@ -32,6 +32,7 @@ public:
     AudioBackend getBackend() const override;
     BufferPtr createBuffer() override;
     SourcePtr createSource() override;
+    QueuedSourcePtr createQueuedSource() override;
     /// @}
 
     GHULBUS_AUDIO_API static std::vector<DeviceIdentifier> enumerateDevices_OAL();

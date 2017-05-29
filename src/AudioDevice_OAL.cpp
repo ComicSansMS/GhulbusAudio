@@ -3,6 +3,7 @@
 #include <gbAudio/impl/Buffer_OAL.hpp>
 #include <gbAudio/impl/Error_OAL.hpp>
 #include <gbAudio/impl/Source_OAL.hpp>
+#include <gbAudio/impl/QueuedSource_OAL.hpp>
 #include <gbAudio/Exceptions.hpp>
 
 #include <gbBase/Log.hpp>
@@ -123,6 +124,18 @@ SourcePtr AudioDevice_OAL::createSource()
     }
     GHULBUS_LOG(Debug, "Creating audio source #" << source_id << ".");
     return std::make_unique<impl::Source_OAL>(source_id);
+}
+
+QueuedSourcePtr AudioDevice_OAL::createQueuedSource()
+{
+    ErrorMonitor_OAL monitor;
+    ALuint source_id;
+    alGenSources(1, &source_id);
+    if(monitor.checkError()) {
+        GHULBUS_THROW(Exceptions::OpenALError(), "Source creation failed.");
+    }
+    GHULBUS_LOG(Debug, "Creating queued audio source #" << source_id << ".");
+    return std::make_unique<impl::QueuedSource_OAL>(source_id);
 }
 
 }

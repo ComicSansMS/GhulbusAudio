@@ -11,17 +11,19 @@
 #include <gbAudio/AudioFwd.hpp>
 #include <gbAudio/Playable.hpp>
 
+#include <functional>
+
 namespace GHULBUS_AUDIO_NAMESPACE
 {
 
 class Source : public Playable
 {
 public:
-    virtual ~Source() = default;
-
     Source() = default;
     Source(Source const&) = delete;
     Source& operator=(Source const&) = delete;
+
+    virtual ~Source() = default;
 
     virtual void bindBuffer(Buffer& buffer) = 0;
 };

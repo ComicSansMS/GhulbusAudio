@@ -75,6 +75,7 @@ void Source_OAL::loop(bool do_loop)
 bool Source_OAL::isLooping() const
 {
     ALint ret;
+    ErrorMonitor_OAL monitor;
     alGetSourcei(m_source, AL_LOOPING, &ret);
     return (ret == AL_TRUE);
 }
