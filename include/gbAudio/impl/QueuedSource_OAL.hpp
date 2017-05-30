@@ -35,6 +35,7 @@ private:
         QueueElement& operator=(QueueElement&&) = default;
     };
     std::deque<QueueElement> m_queue;
+    State m_userRequestedPlayState;
 public:
     QueuedSource_OAL(ALuint source_id);
 
@@ -67,6 +68,8 @@ public:
     void enqueueBuffer(Buffer& buffer, BufferProcessedCallback cb) override;
 
     void pump() override;
+
+    void clearQueue() override;
     /// @}
 };
 

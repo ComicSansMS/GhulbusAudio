@@ -94,5 +94,16 @@ void Source_OAL::bindBuffer(Buffer& buffer)
     }
 }
 
+void Source_OAL::detachBuffer()
+{
+    GHULBUS_PRECONDITION_MESSAGE(getPlayState() == State::Stopped,
+                                 "Source must be stopped before rebinding");
+    ErrorMonitor_OAL monitor;
+    alSourcei(m_source, AL_BUFFER, 0);
+    if(monitor.checkError()) {
+        GHULBUS_THROW(Exceptions::OpenALError(), "Unable detach OpenAL buffer from source.");
+    }
+}
+
 }
 }

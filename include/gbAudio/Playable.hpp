@@ -11,6 +11,8 @@
 namespace GHULBUS_AUDIO_NAMESPACE
 {
 
+/** Common interface for sources capable of playing sounds.
+ */
 class Playable
 {
 public:
@@ -18,9 +20,9 @@ public:
      */
     enum class State
     {
-        Stopped,
-        Playing,
-        Paused
+        Stopped,        ///< Stopped.
+        Playing,        ///< Playing.
+        Paused          ///< Paused.
     };
 public:
     virtual ~Playable() = default;
@@ -32,6 +34,7 @@ public:
     /** Start playback.
      * If the source is already playing, calling Play() will cause it to restart from the beginning.
      * If the source is paused, it will resume playing where it left off.
+     * Once playback has completed, the source will automatically transition to the Stopped state.
      */
     virtual void play() = 0;
 

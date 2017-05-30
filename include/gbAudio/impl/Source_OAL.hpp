@@ -48,6 +48,8 @@ public:
     /// @}
 
     void bindBuffer(Buffer& buffer) override;
+
+    void detachBuffer() override;
     /// @}
 };
 

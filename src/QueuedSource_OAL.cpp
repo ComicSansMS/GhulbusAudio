@@ -16,7 +16,7 @@ namespace impl
 {
 
 QueuedSource_OAL::QueuedSource_OAL(ALuint source_id)
-    :m_source(source_id)
+    :m_source(source_id), m_userRequestedPlayState(State::Stopped)
 {
 }
 
@@ -32,6 +32,7 @@ void QueuedSource_OAL::play()
     GHULBUS_LOG(Trace, "Playing queued source #" << m_source << ".");
     ErrorMonitor_OAL monitor;
     alSourcePlay(m_source);
+    m_userRequestedPlayState = State::Playing;
 }
 
 void QueuedSource_OAL::pause()
@@ -39,6 +40,7 @@ void QueuedSource_OAL::pause()
     GHULBUS_LOG(Trace, "Pausing queued source #" << m_source << ".");
     ErrorMonitor_OAL monitor;
     alSourcePause(m_source);
+    m_userRequestedPlayState = State::Paused;
 }
 
 void QueuedSource_OAL::stop()
@@ -46,6 +48,7 @@ void QueuedSource_OAL::stop()
     GHULBUS_LOG(Trace, "Stopping queued source #" << m_source << ".");
     ErrorMonitor_OAL monitor;
     alSourceStop(m_source);
+    m_userRequestedPlayState = State::Stopped;
 }
 
 void QueuedSource_OAL::rewind()
@@ -132,6 +135,22 @@ void QueuedSource_OAL::pump()
         if(monitor.checkError()) {
             GHULBUS_THROW(Exceptions::OpenALError(), "Error while re-queuing buffers to source.");
         }
+        // If a source stopped playing because it ran out of buffers, reinserting buffers will resume playback
+        if(m_userRequestedPlayState == State::Playing && getPlayState() == State::Stopped)
+        {
+            alSourcePlay(m_source);
+        }
+    }
+}
+
+void QueuedSource_OAL::clearQueue()
+{
+    GHULBUS_PRECONDITION(getPlayState() == State::Stopped);
+    ErrorMonitor_OAL monitor;
+    std::vector<ALuint> free_buffers(m_queue.size());
+    alSourceUnqueueBuffers(m_source, static_cast<ALsizei>(m_queue.size()), free_buffers.data());
+    if(monitor.checkError()) {
+        GHULBUS_THROW(Exceptions::OpenALError(), "Error while clearing buffer queue on source.");
     }
 }
 

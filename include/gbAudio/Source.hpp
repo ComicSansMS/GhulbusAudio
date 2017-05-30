@@ -16,6 +16,8 @@
 namespace GHULBUS_AUDIO_NAMESPACE
 {
 
+/** A simple single-buffer source.
+ */
 class Source : public Playable
 {
 public:
@@ -25,7 +27,18 @@ public:
 
     virtual ~Source() = default;
 
+    /** Bind a buffer for playback.
+     * The same buffer may be bound to multiple sources.
+     * The buffer must not be destroyed while it is still bound to any source.
+     * Destroying the source will automatically detach the buffer.
+     * @pre getPlayState() == State::Stopped
+     */
     virtual void bindBuffer(Buffer& buffer) = 0;
+
+    /** Detach the bound buffer, if any.
+     * @pre getPlayState() == State::Stopped
+     */
+    virtual void detachBuffer() = 0;
 };
 
 }
