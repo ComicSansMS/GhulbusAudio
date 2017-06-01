@@ -115,6 +115,7 @@ void QueuedSource_OAL::pump()
     }
 
     std::vector<ALuint> reinserted_buffers;
+    reinserted_buffers.reserve(free_buffers.size());        // we assume that reinsertion is the typical case
     auto it = begin(free_buffers);
     while(it != end(free_buffers)) {
         auto const qe = m_queue.front();
