@@ -33,14 +33,14 @@ addons: &clang34
 install:
   - gcc-5 --version
 #  - clang-3.6 --version
-  # install CMake 3.3
+  # install CMake 3.9
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
   - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
-  - echo "f3546812c11ce7f5d64dc132a566b749 *cmake-3.3.2-Linux-x86_64.tar.gz" > cmake_md5.txt
-  - travis_retry wget --no-check-certificate https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz
+  - echo "656dcc6efd777b8a510016fb39603b6b *cmake-3.9.0-Linux-x86_64.tar.gz" > cmake_md5.txt
+  - travis_retry wget --no-check-certificate https://cmake.org/files/v3.9/cmake-3.9.0-Linux-x86_64.tar.gz
   - md5sum -c cmake_md5.txt
-  - tar -xvf cmake-3.3.2-Linux-x86_64.tar.gz > /dev/null
-  - mv cmake-3.3.2-Linux-x86_64 cmake-install
+  - tar -xvf cmake-3.9.0-Linux-x86_64.tar.gz > /dev/null
+  - mv cmake-3.9.0-Linux-x86_64 cmake-install
   - PATH=${DEPS_DIR}/cmake-install:${DEPS_DIR}/cmake-install/bin:$PATH
   - which cmake
 
