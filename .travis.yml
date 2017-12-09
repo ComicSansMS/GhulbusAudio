@@ -62,6 +62,12 @@ before_script:
   - make
   - cd ${TRAVIS_BUILD_DIR}
 
+script:
+  - cd ${TRAVIS_BUILD_DIR}/build-static-gcc7
+#  - make test
+  - cd ${TRAVIS_BUILD_DIR}/build-coverage-gcc7
+#  - make test
+
 after_script:
   - cd ${TRAVIS_BUILD_DIR}/build-static-gcc7
   - make doxygen-doc
