@@ -209,6 +209,15 @@ if(GB_BUILD_TESTS)
 endif()
 
 ###############################################################################
+## Examples
+###############################################################################
+option(GB_BUILD_EXAMPLES "Determines whether to build examples." ON)
+if(GB_BUILD_EXAMPLES)
+    add_executable(wav_playback ${PROJECT_SOURCE_DIR}/examples/wav_playback/wav_playback.cpp)
+    target_link_libraries(wav_playback PUBLIC gbAudio)
+endif()
+
+###############################################################################
 ## Doxygen gbAudio
 ###############################################################################
 
