@@ -9,6 +9,7 @@
 #include <gbAudio/config.hpp>
 
 #include <cstdint>
+#include <iosfwd>
 
 namespace GHULBUS_AUDIO_NAMESPACE
 {
@@ -19,6 +20,8 @@ enum class Format {
     Mono16,                     ///< 16-bit Mono
     Stereo16                    ///< 16-bit Stereo
 };
+
+GHULBUS_AUDIO_API std::ostream& operator<<(std::ostream& os, Format format);
 
 namespace DataFormat
 {

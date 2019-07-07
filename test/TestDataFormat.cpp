@@ -1,5 +1,7 @@
 #include <gbAudio/DataFormat.hpp>
 
+#include <sstream>
+
 #include <catch.hpp>
 
 TEST_CASE("DataFormat")
@@ -17,6 +19,15 @@ TEST_CASE("DataFormat")
         CHECK(vm16 == Format::Mono16);
         constexpr auto vs16 = getDataFormat<Stereo16>();
         CHECK(vs16 == Format::Stereo16);
+    }
+
+    SECTION("Data Format To String")
+    {
+        for (auto const format : {Format::Unknown, Format::Mono8, Format::Stereo8, Format::Mono16, Format::Stereo16}) {
+            std::stringstream sstr;
+            sstr << format;
+            CHECK(!sstr.str().empty());
+        }
     }
 
 }

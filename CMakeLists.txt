@@ -60,6 +60,7 @@ set(GB_AUDIO_SOURCE_FILES
     ${GB_AUDIO_SOURCE_DIR}/Audio.cpp
     ${GB_AUDIO_SOURCE_DIR}/AudioBackend.cpp
     ${GB_AUDIO_SOURCE_DIR}/AudioDevice.cpp
+    ${GB_AUDIO_SOURCE_DIR}/DataFormat.cpp
     ${GB_AUDIO_SOURCE_DIR}/WavLoader.cpp
 )
 
