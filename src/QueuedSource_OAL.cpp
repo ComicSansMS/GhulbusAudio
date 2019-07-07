@@ -86,7 +86,7 @@ bool QueuedSource_OAL::isLooping() const
 
 void QueuedSource_OAL::enqueueBuffer(Buffer& buffer)
 {
-    enqueueBuffer(buffer, BufferProcessedCallback());
+    enqueueBuffer(buffer, [](Buffer&) { return BufferAction::Drop; });
 }
 
 void QueuedSource_OAL::enqueueBuffer(Buffer& buffer, BufferProcessedCallback cb)
