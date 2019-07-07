@@ -29,12 +29,17 @@ AudioDevicePtr AudioDevice::create(AudioBackend audio_backend, AudioDevice::Devi
 {
     switch(audio_backend)
     {
-    case AudioBackend::Default:
+    case AudioBackend::Default: /* fallthrough */
     case AudioBackend::OpenAL:
         return std::make_unique<impl::AudioDevice_OAL>(device_id);
-    default: break;
     }
     GHULBUS_UNREACHABLE_MESSAGE("Invalid audio backend.");
+}
+
+/* static */
+std::vector<AudioDevice::DeviceIdentifier> AudioDevice::enumerateDevices()
+{
+    return AudioDevice::enumerateDevices(AudioBackend::Default);
 }
 
 /* static */
@@ -42,10 +47,9 @@ std::vector<AudioDevice::DeviceIdentifier> AudioDevice::enumerateDevices(AudioBa
 {
     switch(audio_backend)
     {
-    case AudioBackend::Default:
+    case AudioBackend::Default: /* fallthrough */
     case AudioBackend::OpenAL:
         return impl::AudioDevice_OAL::enumerateDevices_OAL();
-    default: break;
     }
     GHULBUS_UNREACHABLE_MESSAGE("Invalid audio backend.");
 }
@@ -59,7 +63,6 @@ std::ostream& operator<<(std::ostream& os, AudioDevice::ChannelFormat channel_fo
     case AudioDevice::ChannelFormat::MC_5_1:  os << "Multi-Channel (5.1)"; break;
     case AudioDevice::ChannelFormat::MC_6_1:  os << "Multi-Channel (6.1)"; break;
     case AudioDevice::ChannelFormat::MC_7_1:  os << "Multi-Channel (7.1)"; break;
-    default: GHULBUS_UNREACHABLE();
     }
     return os;
 }

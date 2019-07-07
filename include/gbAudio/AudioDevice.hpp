@@ -41,6 +41,7 @@ public:
 
     virtual std::vector<ChannelFormat> getSupportedChannelFormats() const = 0;
     virtual AudioBackend getBackend() const = 0;
+    virtual DeviceIdentifier getDeviceIdentifier() = 0;
     virtual BufferPtr createBuffer() = 0;
     virtual SourcePtr createSource() = 0;
     virtual QueuedSourcePtr createQueuedSource() = 0;
@@ -48,6 +49,7 @@ public:
     GHULBUS_AUDIO_API static AudioDevicePtr create();
     GHULBUS_AUDIO_API static AudioDevicePtr create(AudioBackend audio_backend);
     GHULBUS_AUDIO_API static AudioDevicePtr create(AudioBackend audio_backend, DeviceIdentifier const& device_id);
+    GHULBUS_AUDIO_API static std::vector<DeviceIdentifier> enumerateDevices();
     GHULBUS_AUDIO_API static std::vector<DeviceIdentifier> enumerateDevices(AudioBackend audio_backend);
 };
 

@@ -78,6 +78,13 @@ AudioBackend AudioDevice_OAL::getBackend() const
     return AudioBackend::OpenAL;
 }
 
+AudioDevice::DeviceIdentifier AudioDevice_OAL::getDeviceIdentifier()
+{
+    DeviceIdentifier ret;
+    ret.name = alcGetString(m_impl->device.get(), ALC_DEVICE_SPECIFIER);
+    return ret;
+}
+
 /* static */ std::vector<AudioDevice::DeviceIdentifier> AudioDevice_OAL::enumerateDevices_OAL()
 {
     if(alcIsExtensionPresent(nullptr, "ALC_ENUMERATION_EXT") != ALC_TRUE) {

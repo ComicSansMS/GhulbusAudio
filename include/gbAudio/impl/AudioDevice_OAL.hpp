@@ -29,6 +29,7 @@ public:
      * @{
      */
     std::vector<ChannelFormat> getSupportedChannelFormats() const override;
+    DeviceIdentifier getDeviceIdentifier() override;
     AudioBackend getBackend() const override;
     BufferPtr createBuffer() override;
     SourcePtr createSource() override;
