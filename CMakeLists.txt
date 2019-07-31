@@ -176,7 +176,7 @@ if(GB_BUILD_TESTS)
         else()
             set(GB_FETCH_EXTERNAL_CATCH
                 URL https://github.com/philsquared/Catch/archive/v1.9.4.tar.gz
-                URL_HASH MD5=84d646fc40373e4ba217363a091ce7b1)
+                URL_HASH MD5=2736caa9e944a03aa7575e0136f9c8c2)
         endif()
         ExternalProject_Add(Catch-External
             PREFIX ${CMAKE_BINARY_DIR}/external/Catch
