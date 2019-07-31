@@ -30,7 +30,7 @@ namespace DataFormat
      * @return Sound data format value for the given layout type
      */
     template<typename T>
-    inline constexpr Format getDataFormat() { static_assert(sizeof(T) == 0, "Unsupported sound format"); }
+    inline constexpr Format getDataFormat() { static_assert(sizeof(T) == 0, "Unsupported sound format"); return {}; }
 
     /** Layout type for 8-bit Mono sound data
      * 8-bit data is expressed as an unsigned value over the range 0 to 255,

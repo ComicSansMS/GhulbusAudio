@@ -19,6 +19,7 @@ ALenum translateDataFormat(Format fmt)
     case Format::Stereo8:  return AL_FORMAT_STEREO8;
     case Format::Mono16:   return AL_FORMAT_MONO16;
     case Format::Stereo16: return AL_FORMAT_STEREO16;
+    case Format::Unknown:  break;
     }
     GHULBUS_UNREACHABLE();
 }
@@ -44,7 +45,7 @@ void Buffer_OAL::setData(DataVariant const& data)
 {
     ErrorMonitor_OAL monitor;
     auto const bytesize = DataOp::getNumberOfSamples(data) * DataOp::getSampleSize(data);
-    if (bytesize > std::numeric_limits<ALsizei>::max()) {
+    if (bytesize > static_cast<std::size_t>(std::numeric_limits<ALsizei>::max())) {
         GHULBUS_THROW(GHULBUS_BASE_NAMESPACE::Exceptions::InvalidArgument(),
                       "Data is too big to fit into a single buffer.");
     }
