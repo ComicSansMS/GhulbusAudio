@@ -140,6 +140,7 @@ void WavLoader::openWav(std::istream& is)
     m_size = data_chunk.Subchunk2Size;
     m_offset = 0;
     m_loaderStream = &is;
+    m_loaderStreamStorage.reset();
 }
 
 DataVariant WavLoader::readAll()
