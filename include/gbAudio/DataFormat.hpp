@@ -23,6 +23,12 @@ enum class Format {
 
 GHULBUS_AUDIO_API std::ostream& operator<<(std::ostream& os, Format format);
 
+/** Get the size of a single sample of a certain format in bytes.
+ * @param[in] format The format to query the size of.
+ * @return Size of one sample of format.
+ */
+std::size_t formatSampleSize(Format const& format);
+
 namespace DataFormat
 {
     /** Retrieves the corresponding sound data descriptor value for a given layout type

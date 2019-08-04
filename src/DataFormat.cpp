@@ -17,4 +17,16 @@ std::ostream& operator<<(std::ostream& os, Format format)
     return os;
 }
 
+std::size_t formatSampleSize(Format const& format)
+{
+    switch (format) {
+    case Format::Unknown:   break;
+    case Format::Mono8:     return sizeof(DataFormat::Mono8);
+    case Format::Stereo8:   return sizeof(DataFormat::Stereo8);
+    case Format::Mono16:    return sizeof(DataFormat::Mono16);
+    case Format::Stereo16:  return sizeof(DataFormat::Stereo16);
+    }
+    return 0;
+}
+
 }

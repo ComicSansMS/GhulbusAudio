@@ -127,9 +127,9 @@ public:
     }
 
     /** Access the actual sound data.
-    * @param[in] i Sample index [0..NumberOfSamples).
-    * @return Sample at the given index.
-    */
+     * @param[in] i Sample index [0..NumberOfSamples).
+     * @return Sample at the given index.
+     */
     FormatType const& operator[](std::size_t i) const
     {
         GHULBUS_PRECONDITION(i < m_data.size());

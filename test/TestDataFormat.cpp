@@ -30,4 +30,13 @@ TEST_CASE("DataFormat")
         }
     }
 
+    SECTION("Data Format Sample Size")
+    {
+        CHECK(formatSampleSize(Format::Mono8) == 1);
+        CHECK(formatSampleSize(Format::Stereo8) == 2);
+        CHECK(formatSampleSize(Format::Mono16) == 2);
+        CHECK(formatSampleSize(Format::Stereo16) == 4);
+        CHECK(formatSampleSize(Format::Unknown) == 0);
+    }
+
 }
