@@ -150,6 +150,7 @@ DataVariant WavLoader::readAll()
 
 DataVariant WavLoader::readChunk(std::size_t size)
 {
+    GHULBUS_PRECONDITION(size > 0);
     GHULBUS_PRECONDITION(size <= m_size - m_offset);
     auto ret = [this]() -> DataVariant {
         switch (m_dataFormat)

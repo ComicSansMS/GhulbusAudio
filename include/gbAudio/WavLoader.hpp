@@ -35,11 +35,13 @@ public:
     void openWav(std::istream& is);
 
     /** Read all remaining data into one block of audio data.
+     * @pre getCurrentReadPosition() != getDataSize().
      * @return A data block of size getDataSize() - getCurrentReadPosition().
      */
     DataVariant readAll();
     /** Read a fixed-size chunk of audio data.
      * @param[in] size Size of the chunk to be read in bytes.
+     * @pre getCurrentReadPosition() != getDataSize().
      * @pre size <= (getDataSize() - getCurrentReadPosition()).
      * @pre size must be a multiple of formatSampleSize(getFormat()).
      */
