@@ -8,6 +8,7 @@
 */
 #include <gbAudio/config.hpp>
 
+#include <cstddef>
 #include <cstdint>
 #include <iosfwd>
 
