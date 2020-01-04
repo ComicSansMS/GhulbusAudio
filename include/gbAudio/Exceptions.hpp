@@ -36,7 +36,7 @@ namespace Exception_Info {
      */
     /** An int representation of the invalid enum value.
      */
-    typedef boost::error_info<Tags::invalid_enum_value, int> invalid_enum_value;
+    using invalid_enum_value = ::GHULBUS_BASE_NAMESPACE::ErrorInfo<Tags::invalid_enum_value, int>;
     /// @}
 }
 namespace Exceptions

@@ -36,9 +36,6 @@ set(GB_AUDIO_VERSION "${GB_AUDIO_VERSION_MAJOR}.${GB_AUDIO_VERSION_MINOR}.${GB_A
 
 option(BUILD_SHARED_LIBS "If checked, generate dynamic instead of static libraries." OFF)
 
-set(Boost_USE_STATIC_LIBS ON)
-find_package(Boost REQUIRED)
-
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
@@ -112,9 +109,7 @@ add_library(gbAudio
     ${GB_AUDIO_IMPL_OAL_HEADER_FILES}
 )
 target_include_directories(gbAudio PUBLIC $<BUILD_INTERFACE:${GB_AUDIO_INCLUDE_DIR}>)
-target_include_directories(gbAudio PUBLIC $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>)
 target_include_directories(gbAudio PRIVATE $<BUILD_INTERFACE:${OPENAL_INCLUDE_DIR}>)
-target_compile_definitions(gbAudio PUBLIC BOOST_ALL_NO_LIB)
 target_link_libraries(gbAudio PUBLIC Threads::Threads)
 target_link_libraries(gbAudio PUBLIC Ghulbus::gbBase)
 target_link_libraries(gbAudio PRIVATE ${OPENAL_LIBRARY})

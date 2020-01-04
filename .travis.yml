@@ -18,17 +18,10 @@ addons: &clang34
       # mscgen is currently not whitelisted :(
       #- mscgen
     # third-party dependencies
-      - libboost1.58-dev
-      - libboost-date-time1.58-dev
-      - libboost-log1.58-dev
-      - libboost-thread1.58-dev
-      - libboost-wave1.58-dev
-      - libboost1.58-all-dev
       - libopenal-dev
     sources:
       - ubuntu-toolchain-r-test
 #      - llvm-toolchain-precise-3.6
-      - boost-latest
 
 install:
   - gcc-7 --version
